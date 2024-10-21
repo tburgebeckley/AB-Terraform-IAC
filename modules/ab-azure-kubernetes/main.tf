@@ -42,7 +42,7 @@ resource "azurerm_kubernetes_cluster" "app_aks" {
     name                        = var.aks_cluster.default_node_pool.name
     vm_size                     = var.aks_cluster.default_node_pool.vm_size
     auto_scaling_enabled        = var.aks_cluster.default_node_pool.auto_scaling_enabled
-    vnet_subnet_id              = app_subnets[var.aks_cluster.default_node_pool.vnet_subnet_map_name].id
+    vnet_subnet_id              = azurerm_subnet.app_subnets[var.aks_cluster.default_node_pool.vnet_subnet_map_name].id
     min_count                   = coalesce(var.aks_cluster.default_node_pool.auto_scaling_enabled ? var.aks_cluster.default_node_pool.min_count : null)
     max_count                   = coalesce(var.aks_cluster.default_node_pool.auto_scaling_enabled ? var.aks_cluster.default_node_pool.min_count : null)
     node_count                  = coalesce(var.aks_cluster.default_node_pool.auto_scaling_enabled ? var.aks_cluster.default_node_pool.min_count : null)
