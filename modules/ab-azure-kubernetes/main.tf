@@ -21,6 +21,8 @@ resource "azurerm_virtual_network" "app_vnet" {
   resource_group_name = azurerm_resource_group.app_rg.name
   location            = var.deployment_location
   tags                = local.tags
+
+  depends_on = [azurerm_resource_group.app_rg]
 }
 
 resource "azurerm_subnet" "app_subnets" {
@@ -29,6 +31,8 @@ resource "azurerm_subnet" "app_subnets" {
   address_prefixes     = [each.value.address_prefix]
   virtual_network_name = azurerm_virtual_network.app_vnet.name
   resource_group_name  = azurerm_resource_group.app_rg.name
+
+  depends_on = [azurerm_virtual_network.app_vnet]
 }
 
 resource "azurerm_kubernetes_cluster" "app_aks" {
@@ -59,4 +63,6 @@ resource "azurerm_kubernetes_cluster" "app_aks" {
   }
 
   tags = local.tags
+
+  depends_on = [azurerm_subnet.app_subnets]
 }
