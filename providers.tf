@@ -1,6 +1,6 @@
 provider "azurerm" {
   features {
-    
+
   }
   use_oidc = true
 }
@@ -12,4 +12,6 @@ terraform {
       version = ">= 4.5.0"
     }
   }
+
+  backend "azurerm" {}
 }
