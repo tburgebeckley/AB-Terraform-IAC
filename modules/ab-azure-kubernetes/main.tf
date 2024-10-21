@@ -1,9 +1,9 @@
 locals {
   tags = {
-    app_id      = vars.application_identifier
-    app_name    = vars.application_name
-    env         = vars.deployment_environment
-    app_owner   = vars.application_owner
+    app_id      = var.application_identifier
+    app_name    = var.application_name
+    env         = var.deployment_environment
+    app_owner   = var.application_owner
     module_name = "ab-azure-kubernetes"
     location    = var.deployment_location
   }
