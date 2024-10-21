@@ -34,6 +34,7 @@ aks_cluster = {
     node_count                  = 1
     temporary_name_for_rotation = "tempnodepool"
     vnet_subnet_map_name        = "subnet1"
+    vm_size                     = "Standard_DS2_v2"
   }
 
 }
