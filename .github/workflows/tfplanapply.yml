@@ -45,10 +45,10 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init -backend=true \
-          --var backend_state_rg_name="${vars.TF_STATE_RG}" \
-          --var backend_state_stgacct_name="${vars.TF_STATE_STORAGE_ACCOUNT}" \
-          --var backend_container_name="${vars.TF_STATE_CONTAINER}" \
-          --var backend_key="${vars.TF_STATE_KEY}"
+          --var backend_state_rg_name="${{ vars.TF_STATE_RG }}" \
+          --var backend_state_stgacct_name="${{ vars.TF_STATE_STORAGE_ACCOUNT }}" \
+          --var backend_container_name="${{ vars.TF_STATE_CONTAINER }}" \
+          --var backend_key="${{ vars.TF_STATE_KEY }}"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
@@ -140,10 +140,10 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init -backend=true \
-          --var backend_state_rg_name="${vars.TF_STATE_RG}" \
-          --var backend_state_stgacct_name="${vars.TF_STATE_STORAGE_ACCOUNT}" \
-          --var backend_container_name="${vars.TF_STATE_CONTAINER}" \
-          --var backend_key="${vars.TF_STATE_KEY}"
+          --var backend_state_rg_name="${{ vars.TF_STATE_RG}" \
+          --var backend_state_stgacct_name="${{ vars.TF_STATE_STORAGE_ACCOUNT}" \
+          --var backend_container_name="${{ vars.TF_STATE_CONTAINER}" \
+          --var backend_key="${{ vars.TF_STATE_KEY }}"
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
