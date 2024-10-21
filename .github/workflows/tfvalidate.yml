@@ -4,17 +4,8 @@ on:
   push:
 
 permissions:
-  id-token: write # Needed for OIDC authentication for Terraform
-  pull-requests: write # Needed for OIDC authentication for Terraform
   contents: read # Needed to clone repo
   actions: read # Potentially needed for private repositories (see https://github.com/github/codeql-action/issues/2117)
-
-
-#These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
-env:
-  ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
-  ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
-  ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
 
 jobs:
   terraform-validation:
@@ -35,8 +26,7 @@ jobs:
 # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        terraform init -backend=true \
-          --backend-config=backend.tfvars
+        terraform init -backend=false
 
     # Validate terraform files
     - name: Terraform Validate
