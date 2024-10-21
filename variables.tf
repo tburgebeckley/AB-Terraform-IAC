@@ -74,24 +74,3 @@ variable "application_owner" {
   type        = string
   description = "Email address of the owner of this application"
 }
-
-# Backend Configuration
-variable "backend_state_rg_name" {
-  type        = string
-  description = "Resource Group name containing backend state storage account"
-}
-
-variable "backend_state_stgacct_name" {
-  type        = string
-  description = "Storage Account name for backend state"
-}
-
-variable "backend_container_name" {
-  type        = string
-  description = "Storage Account container for storing backend state"
-}
-
-variable "backend_key" {
-  type        = string
-  description = "State file name to be stored in Storage Account container"
-}
