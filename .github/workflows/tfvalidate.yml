@@ -1,0 +1,65 @@
+name: 'Terraform Validate'
+
+on:
+  push:
+
+permissions:
+  id-token: write # Needed for OIDC authentication for Terraform
+  pull-requests: write # Needed for OIDC authentication for Terraform
+  contents: read # Needed to clone repo
+  actions: read # Potentially needed for private repositories (see https://github.com/github/codeql-action/issues/2117)
+
+
+#These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
+env:
+  ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
+  ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
+
+jobs:
+  terraform-validation:
+    name: 'Terraform Validation'
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.9.8"
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: |
+        terraform init -backend=true \
+          --var backend_state_rg_name="${vars.TF_STATE_RG}" \
+          --var backend_state_stgacct_name="${vars.TF_STATE_STORAGE_ACCOUNT}" \
+          --var backend_container_name="${vars.TF_STATE_CONTAINER}" \
+          --var backend_key="${vars.TF_STATE_KEY}"
+
+    # Validate terraform files
+    - name: Terraform Validate
+      run: terraform validate
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+    
+    # Perform a security scan of the terraform code using checkov
+    - name: Run Checkov action
+      id: checkov
+      uses: bridgecrewio/checkov-action@master
+      with: 
+        framework: terraform
+
+    # Upload results to GitHub Advanced Security
+    - name: Upload SARIF file
+      if: success() || failure()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: results.sarif
+        category: checkov
