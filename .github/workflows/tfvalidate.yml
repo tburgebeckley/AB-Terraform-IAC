@@ -32,14 +32,11 @@ jobs:
       with:
         terraform_version: "1.9.8"
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+# Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
         terraform init -backend=true \
-          --var backend_state_rg_name="${{ vars.TF_STATE_RG }}" \
-          --var backend_state_stgacct_name="${{ vars.TF_STATE_STORAGE_ACCOUNT }}" \
-          --var backend_container_name="${{ vars.TF_STATE_CONTAINER }}" \
-          --var backend_key="${{ vars.TF_STATE_KEY }}"
+          --backend-config=backend.tfvars
 
     # Validate terraform files
     - name: Terraform Validate
